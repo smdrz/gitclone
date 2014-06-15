@@ -3,11 +3,12 @@ gitclone
 
 a script based on pygobject for cloning git repos quickly
 
-###SETUP
-place this script in ~/bin or /usr/local/bin
-*Note: i will automate this soon
- -----------------------------------------------
-###Save as Thunar custom command for quick cloning
+###Setup
+
+* place this script in ~/bin or /usr/local/bin
+
+
+* Save as Thunar custom command for quick cloning
 
 Thunar -> Edit -> Configure sustom actions
 
@@ -18,3 +19,5 @@ Description   : git clone
 Command       : gitclone 
 Icon          : <any git icon>
 ```
+
+* Copy any git link(scipt will get contents from clipboard) and use custom action to clone quickly
