@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+# __author__ = 'sam'
+from gi.repository import Gtk
+from gi.repository import Notify
+from gi.repository import Gdk
+from sh import git
+import argparse
+class Window(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self)
+        self.check_status = True
+        self.set_border_width(10)
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        self.ctxt = self.clipboard.wait_for_text()
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "Git Clone"
+        hb.set_opacity(0.8)
+        self.set_titlebar(hb)
+        self.hbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        vbox = Gtk.Box(spacing=4)
+        vbox.set_spacing(2)
+        self.entry = Gtk.Entry()
+        self.entry.set_size_request(20,5)
+
+        if ".git" in self.ctxt:
+            self.entry.set_text(self.ctxt)
+        self.cloneButton = Gtk.Button(label="Clone")
+        self.cloneButton.connect('clicked', self.doClone)
+        self.status = Gtk.Label("")
+        vbox.add(Gtk.Label(label='Git URL'))
+        vbox.add(self.entry)
+        vbox.add(self.cloneButton)
+        self.hbox.add(vbox)
+        self.hbox.add(self.status)
+        self.status.set_visible(False)
+        self.add(self.hbox)
+        parser = argparse.ArgumentParser()
+        parser.add_argument("url")
+        self.args = parser.parse_args()
+
+    def doClone(self, widget):
+        self.status.set_label("Cloning "+self.entry.get_text() )
+        self.status.set_visible(True)
+        st = git('clone',self.entry.get_text() )
+        l = b'\xF0\x9F\x98\x81'.decode()
+        self.status.set_label("Done, Happy Coding "+l)
+
+
+def main():
+    win = Window()
+    win.connect("delete-event", Gtk.main_quit)
+    win.show_all()
+    Gtk.main()
+
+
+if __name__ == '__main__':
+    main()
